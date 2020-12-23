@@ -20,14 +20,10 @@ export default Backbone.View.extend({
 
   handleClick() {
     console.log('click page');
-    let currentPageComponents = this.em.getComponents();
+    let currentPageComponents = this.em.getHtml();
 
     this.em.setComponents(this.previousPageComponents);
-    //this.em.config.components = this.previousPageComponents;
-    //this.em.setStyle(this.previousPageStyle);
-
     this.previousPageComponents = currentPageComponents;
-    //this.previousPageStyle = currentPageStyle;
     this.em.refreshCanvas();
   },
 
