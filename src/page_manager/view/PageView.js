@@ -16,19 +16,26 @@ export default Backbone.View.extend({
     this.listenTo(model, 'change', this.render);
 
     this.previousPageComponents = [];
+
+    this.em.currentPage = this;
   },
 
   handleClick() {
-    console.log('click page');
-    let currentPageComponents = this.em.getHtml();
+    const { em, model } = this;
+    console.log('click page', model);
+    let currentPageComponents = em.getHtml();
 
-    this.em.setComponents(this.previousPageComponents);
-    this.previousPageComponents = currentPageComponents;
-    this.em.refreshCanvas();
+    this.em.currentPage.model.content = em.getHtml();
+    this.em.currentPage = this;
+
+    em.setComponents(this.em.currentPage.model.content);
+    //this.previousPageComponents = currentPageComponents;
+    em.refreshCanvas();
   },
 
   render() {
     const { em, el, $el, ppfx, model } = this;
+    console.log($el);
     const disable = model.get('disable');
     const attr = model.get('attributes') || {};
     const cls = attr.class || '';
