@@ -4,6 +4,7 @@ const osm = 'open-sm';
 const otm = 'open-tm';
 const ola = 'open-layers';
 const obl = 'open-blocks';
+const opm = 'open-pagemanager';
 const ful = 'fullscreen';
 const prv = 'preview';
 
@@ -80,6 +81,13 @@ export default {
           command: obl,
           togglable: 0,
           attributes: { title: 'Open Blocks' }
+        },
+        {
+          id: opm,
+          className: 'fa fa-files-o',
+          command: opm,
+          togglable: 0,
+          attributes: { title: 'Open Page Manager' }
         }
       ]
     }

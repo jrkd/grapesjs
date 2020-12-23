@@ -41,6 +41,10 @@
  * * `block:drag:start` - Started dragging block, model of the block is passed as an argument
  * * `block:drag` - Dragging block, the block's model and the drag event are passed as arguments
  * * `block:drag:stop` - Dragging of the block is stopped. As agruments for the callback you get, the dropped component model (if dropped successfully) and the model of the block
+ * ### Page Manager
+ * * 'pagemanager:add' - New page added
+ * * 'pagemanager:remove - Page removed
+ * * 'pagemanager:open - Page open
  * ### Assets
  * * `asset:add` - New asset added
  * * `asset:remove` - Asset removed
@@ -167,6 +171,8 @@ export default (config = {}) => {
         ['Assets', 'AssetManager'],
         'BlockManager',
         ['Blocks', 'BlockManager'],
+        'PageManager',
+        ['Pages', 'PageManager'],
         'TraitManager',
         ['Traits', 'TraitManager'],
         'SelectorManager',
