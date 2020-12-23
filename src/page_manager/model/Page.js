@@ -21,7 +21,7 @@ export default Backbone.Model.extend({
 
     //Ive added these.
     components: [],
-    style: [],
+    css: '',
     isActive: false,
     id: -1
   },

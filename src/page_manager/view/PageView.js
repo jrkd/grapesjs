@@ -26,9 +26,16 @@ export default Backbone.View.extend({
     let currentPageComponents = em.getHtml();
 
     this.em.currentPage.model.content = em.getHtml();
+    let pageCSS = '';
+    em.getStyle().each(function(rule, index) {
+      pageCSS += ' ' + rule.toCSS();
+    });
+    this.em.currentPage.model.css = pageCSS;
+
     this.em.currentPage = this;
 
     em.setComponents(this.em.currentPage.model.content);
+    em.setStyle(this.em.currentPage.model.css);
     //this.previousPageComponents = currentPageComponents;
     em.refreshCanvas();
   },
