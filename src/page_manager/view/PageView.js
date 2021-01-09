@@ -2,7 +2,8 @@ import Backbone from 'backbone';
 
 export default Backbone.View.extend({
   events: {
-    click: 'handleClick'
+    click: 'handleClick',
+    deleteClick: 'handleDeleteClick'
   },
 
   initialize(o, config = {}) {
@@ -40,6 +41,26 @@ export default Backbone.View.extend({
     em.refreshCanvas();
   },
 
+  handleDeleteClick() {
+    const { em, model } = this;
+    console.log('click delete page', model);
+    let currentPageComponents = em.getHtml();
+
+    this.em.currentPage.model.content = em.getHtml();
+    let pageCSS = '';
+    em.getStyle().each(function(rule, index) {
+      pageCSS += ' ' + rule.toCSS();
+    });
+    this.em.currentPage.model.css = pageCSS;
+
+    this.em.currentPage = this;
+
+    em.setComponents(this.em.currentPage.model.content);
+    em.setStyle(this.em.currentPage.model.css);
+    //this.previousPageComponents = currentPageComponents;
+    em.refreshCanvas();
+  },
+
   render() {
     const { em, el, $el, ppfx, model } = this;
     console.log($el);
@@ -47,7 +68,7 @@ export default Backbone.View.extend({
     const attr = model.get('attributes') || {};
     const cls = attr.class || '';
     const className = `${ppfx}page`;
-    const label = 'Test Page';
+    const label = model.get('id');
     //(em && em.t(`blockManager.labels.${model.id}`)) || model.get('label');
     const render = model.get('render');
     const media = model.get('media');
@@ -56,9 +77,10 @@ export default Backbone.View.extend({
     el.className = `${cls} ${className} ${ppfx}one-bg ${clsAdd}`.trim();
     el.innerHTML = `
       ${media ? `<div class="${className}__media--TEST">${media}</div>` : ''}
-      <div class="${className}-label">${label}</div>
+      <div class="${className}-label">${label}</div><span title="Delete Page" class="gjs-pn-btn fa fa-trash"></span>
     `;
     el.title = 'TEST PAGE TITLE'; //el.textContent.trim();
+    el.id = model.get('id');
     const result = render && render({ el, model, className, prefix: ppfx });
     if (result) el.innerHTML = result;
     return this;

@@ -46,6 +46,8 @@ const commandsDef = [
   ['open-traits', 'OpenTraitManager', 'open-tm'],
   ['open-blocks', 'OpenBlocks', 'open-blocks'],
   ['open-pagemanager', 'OpenPageManager', 'open-pagemanager'],
+  // ['pagemanager-new', 'NewPage', 'pagemanager-new'],
+  // ['pagemanager-delete', 'DeletePage', 'pagemanager-delete'],
   ['open-assets', 'OpenAssets', 'open-assets'],
   ['component-select', 'SelectComponent', 'select-comp'],
   ['component-outline', 'SwitchVisibility', 'sw-visibility'],

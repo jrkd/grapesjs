@@ -237,8 +237,6 @@ export default () => {
       panels.stopListening();
       PanelsViewObj.remove();
       [c, panels, PanelsViewObj].forEach(i => (i = {}));
-    },
-
-    Panel
+    }
   };
 };
