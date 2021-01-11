@@ -49,7 +49,7 @@ export default Backbone.View.extend({
       });
     }
     if (event.target.closest('.fa.fa-trash') != null) {
-      editor.PageManager.remove(event.target.closest('.gjs-page-item').id);
+      editor.PageManager.remove(event.path[1].id);
     }
   },
 

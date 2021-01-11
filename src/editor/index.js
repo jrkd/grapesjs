@@ -293,6 +293,10 @@ export default (config = {}) => {
       return this.getWrapper().append(components, opts);
     },
 
+    setCurrentPage(page) {
+      this.currentPage = page;
+    },
+
     /**
      * Returns style in JSON format object
      * @return {Object}

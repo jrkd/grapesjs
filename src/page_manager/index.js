@@ -2,7 +2,7 @@
  * You can customize the initial state of the module from the editor initialization, by passing the following [Configuration Object](https://github.com/artf/grapesjs/blob/master/src/block_manager/config/config.js)
  * ```js
  * const editor = grapesjs.init({
- *  blockManager: {
+ *  pageManager: {
  *    // options
  *  }
  * })
@@ -11,7 +11,7 @@
  * Once the editor is instantiated you can use its API. Before using these methods you should get the module from the instance
  *
  * ```js
- * const blockManager = editor.BlockManager;
+ * const pageManager = editor.PageManager;
  * ```
  * * [add](#add)
  * * [get](#get)
@@ -23,17 +23,18 @@
  * * [getContainer](#getcontainer)
  * * [render](#render)
  *
- * @module BlockManager
+ * @module PageManager
  */
 import { isElement } from 'underscore';
 import defaults from './config/config';
 import Pages from './model/Pages';
 import PageCategories from './model/Categories';
 import PagesView from './view/PagesView';
+import Page from './model/Page';
 
 export default () => {
   var c = {};
-  var pages, pagesVisible, pagesView;
+  var pages, pagesVisible, pagesView, currentPageModel;
   var categories = [];
 
   return {
@@ -63,6 +64,7 @@ export default () => {
       // Global pages collection
       pages = new Pages([]);
       pagesVisible = new Pages([]);
+      currentPageModel = null;
       categories = new PageCategories();
 
       // Setup the sync between the global and public collections
@@ -92,7 +94,7 @@ export default () => {
      */
     onLoad() {
       const pages = this.getAll();
-      !pages.length && pages.reset(c.blocks);
+      !pages.length && pages.reset(c.pages);
     },
 
     /**
@@ -111,7 +113,7 @@ export default () => {
     },
 
     /**
-     * Add new block to the collection.
+     * Add new page to the collection.
      * @param {string} id Block id
      * @param {Object} opts Options
      * @param {string} opts.label Name of the block
@@ -136,7 +138,16 @@ export default () => {
     add(id, opts) {
       var obj = opts || {};
       obj.id = id;
-      return pages.add(obj);
+      if (pages.length == 0) {
+        obj.isCurrentPage = true;
+      }
+      let newPage = pages.add(obj);
+
+      if (pages.length == 1) {
+        currentPageModel = pages.first();
+      }
+
+      return newPage;
     },
 
     /**
@@ -185,12 +196,32 @@ export default () => {
     },
 
     /**
-     * Get all available categories.
-     * It's possible to add categories only within blocks via 'add()' method
-     * @return {Array|Collection}
+     *
+     * @param {Page} newPageModel
      */
-    getCategories() {
-      return categories;
+    ChangePage(newPageModel, em) {
+      if (currentPageModel) {
+        currentPageModel.set('content', em.getHtml());
+        let pageCSS = '';
+        em.getStyle().each(function(rule, index) {
+          pageCSS += ' ' + rule.toCSS();
+        });
+
+        //Store the most recent state of the canvas to the model.
+        currentPageModel.set('css', pageCSS);
+        currentPageModel.set('isCurrentPage', false);
+      }
+      currentPageModel = newPageModel;
+
+      //Update our new page model
+      currentPageModel.set('isCurrentPage', true);
+
+      //Update the editor with data from this model
+      em.setComponents(currentPageModel.get('content'));
+      em.setStyle(currentPageModel.get('css'));
+      em.refreshCanvas();
+
+      //pagesView.$el.closest(".gjs-pages-c").find(".gjs-page--current").removeClass("gjs-page--current");
     },
 
     /**
@@ -242,7 +273,7 @@ export default () => {
 
       if (pagesView) {
         pagesView.updateConfig(opts);
-        pagesView.collection.reset(toRender);
+        //pagesView.collection.reset(toRender);
 
         if (!pagesView.rendered) {
           pagesView.render();

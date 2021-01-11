@@ -13,11 +13,6 @@ export default {
     panels.set('appendContent', pages).trigger('change:appendContent');
     this.pages = pages;
     //}
-
-    //TODO: Remove this, just testing we have our own layout in the menu.
-    // this.pages.style.backgroundColor = '#FFAABB';
-    // this.pages.style.height = '100%';
-    // this.pages.style.display = 'block';
   },
 
   stop() {

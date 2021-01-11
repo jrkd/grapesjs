@@ -38,6 +38,12 @@
   position: relative;
   padding-right: 50px;
 
+  &--current{
+    & .gjs-page-label{
+      font-weight: 900;
+    }
+  }
+
   &:hover {
     box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.15);
   }
@@ -49,6 +55,8 @@
   &__media {
     margin-bottom: 10px;
   }
+
+  
 }
 
 .gjs-add-page-btn {
